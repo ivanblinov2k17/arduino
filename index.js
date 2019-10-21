@@ -1,8 +1,14 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const fs = require("fs");
 
-app.get('/', function(req, res){
-    res.send('hello world');
+const app = express();
+
+app.use(express.static('front'));
+
+app.get("/info", function(req, res, next) {
+    fs.readFile("./data.json", (err, json) => {
+      res.send(json);
+    });
 });
 
 app.listen(3000, function(){
