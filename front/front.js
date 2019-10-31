@@ -1,10 +1,13 @@
 const text = document.getElementById('text');
+const input1 = document.getElementById('input1');
+const input2 = document.getElementById('input2');
+const button = document.getElementById('button');
 
 function reloadData(){
     fetch('/info').then(response=> {
         if (response.ok){
             response.json().then(json=>{
-                text.innerText = json.value;
+                text.innerText = json["value1"] + json["value2"];
             });
 
         }
@@ -14,14 +17,19 @@ function reloadData(){
 function postData(data){
     fetch('/info',{
         method: "POST",
-        body: "MYDATA",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        body: data,
+        headers: { "Content-Type": 'application/json' }
     })
 }
 
-let c_data = {
-    "value":56
+function buttonClick(){
+    let c_data = {
+        "value1":input1.value,
+        "value2":input2.value
+    }
+    postData(JSON.stringify(c_data));
+    console.log("works")
+    reloadData();
 }
 
-postData(c_data);
 reloadData();
