@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const WebSocket = require("ws");
 var bodyParser = require("body-parser");
-
+var peers = []; //список всех соединенных сокетов
 const app = express();
 
 app.use(
@@ -33,8 +33,12 @@ const wss = new WebSocket.Server({
     port: 8080
 });
 wss.on('connection', function connection(ws) {
+    peers.push(ws);
     ws.on('message', function incoming(message) {
-        console.log('received: %s', message);
+        peers.forEach(function (webs) {
+            webs.send(message);
+            console.log(peers);
+        });
     });
 
     ws.send('something');
